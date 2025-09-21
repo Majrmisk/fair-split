@@ -40,3 +40,9 @@ A WPF desktop app for managing, sharing and settling expenses between friends.
 - **MVVM** - Clean separation of UI, logic, and data  
 - **LiveCharts.Wpf** - Interactive charts and graphs  
 - **Entity Framework Core** - Data persistence
+
+---
+
+## License
+This project is licensed under the [Apache License 2.0](./LICENSE).
+
