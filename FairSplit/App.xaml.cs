@@ -35,6 +35,11 @@ namespace FairSplit
             _dbContextFactory = new FairSplitDbContextFactory(
                 new DbContextOptionsBuilder().UseSqlite(_connectionString).Options);
 
+            using (FairSplitDbContext context = _dbContextFactory.Create())
+            {
+                context.Database.Migrate();
+            }
+
             _createGroupCommand = new CreateGroupCommand(_dbContextFactory);
             _deleteGroupCommand = new DeleteGroupCommand(_dbContextFactory);
             _updateGroupCommand = new UpdateGroupCommand(_dbContextFactory);
@@ -46,11 +51,6 @@ namespace FairSplit
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            using(FairSplitDbContext context = _dbContextFactory.Create())
-            {
-                context.Database.Migrate();
-            }
-
             _navigationStore.CurrentViewModel = new SelectGroupViewModel(_core, _navigationStore);
 
             MainWindow = new MainWindow()
