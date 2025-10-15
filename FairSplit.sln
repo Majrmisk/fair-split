@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FairSplit.EntityFramework",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FairSplit.Domain", "FairSplit.Domain\FairSplit.Domain.csproj", "{95997C82-5B05-44D6-A170-B62642EACF86}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FairSplit.Tests", "FairSplit.Tests\FairSplit.Tests.csproj", "{9383F9ED-A217-49F8-911C-D1D3D645BF6E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{95997C82-5B05-44D6-A170-B62642EACF86}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95997C82-5B05-44D6-A170-B62642EACF86}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95997C82-5B05-44D6-A170-B62642EACF86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9383F9ED-A217-49F8-911C-D1D3D645BF6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9383F9ED-A217-49F8-911C-D1D3D645BF6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9383F9ED-A217-49F8-911C-D1D3D645BF6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9383F9ED-A217-49F8-911C-D1D3D645BF6E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
