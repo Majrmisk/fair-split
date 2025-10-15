@@ -34,11 +34,11 @@ namespace FairSplit.Commands
             }
 
             List<MemberPayment> recipients = [];
-            for (int i = 1; i < columnTotals.Count - 1; i++)
+            for (int i = 1; i < columnTotals.Count; i++)
             {
                 if (columnTotals[i] != 0)
                 {
-                    recipients.Add(new(_group.GetAllMembers()[i], columnTotals[i]));
+                    recipients.Add(new(_group.GetAllMembers()[i - 1], columnTotals[i]));
                 }
             }
 

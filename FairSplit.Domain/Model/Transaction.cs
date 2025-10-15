@@ -5,12 +5,6 @@ namespace FairSplit.Domain.Model
     public class Transaction(Guid id, string name, decimal totalAmount, Member payer, DateTime transactionTime, bool isPaidOff,
                        CategoryType category, List<MemberPayment> recipients)
     {
-        private decimal total;
-        private Member payer;
-        private DateTime selectedDate;
-        private bool v;
-        private CategoryType selectedCategory;
-        private List<(Member Recipient, decimal Amount)> recipients;
 
         public Guid Id { get; } = id;
 
