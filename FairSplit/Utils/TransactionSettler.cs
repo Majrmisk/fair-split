@@ -72,6 +72,7 @@ namespace FairSplit.Utils
 
             graph.EliminateLoops();
             graph.EliminateSplits();
+            graph.EliminateChains();
 
             return graph.ToPayments();
         }
@@ -123,23 +124,6 @@ namespace FairSplit.Utils
                 sourceNode.Edges[destinationNode] = amount;
             }
 
-            public string ToGraphviz()
-            {
-                var sb = new StringBuilder();
-                sb.AppendLine("digraph G {");
-
-                foreach (var node in _nodes)
-                {
-                    foreach (var (destination, amount) in node.Edges)
-                    {
-                        sb.AppendLine($"    \"{node.Person.Name}\" -> \"{destination.Person.Name}\" [label=\"{amount}\"];");
-                    }
-                }
-
-                sb.AppendLine("}");
-                return sb.ToString();
-            }
-
             public void EliminateSplits()
             {
                 foreach (var node in _nodes)
@@ -177,7 +161,7 @@ namespace FairSplit.Utils
                 return false;
             }
 
-            private void RemoveFoundSplit(Node shorterRouteWithFinalNode, Node longerRoute, decimal fromLongerToFinal)
+            private static void RemoveFoundSplit(Node shorterRouteWithFinalNode, Node longerRoute, decimal fromLongerToFinal)
             {
                 HashSet<Node> longerRouteNodes = [];
 
@@ -267,7 +251,6 @@ namespace FairSplit.Utils
                     if (visited.Contains(edge.Key))
                     {
                         RemoveFoundLoop(currentNode);
-                        var deez = ToGraphviz();
                         return true;
                     }
                     visited.Add(currentNode);
@@ -316,6 +299,59 @@ namespace FairSplit.Utils
                 {
                     currentNode.Edges.Remove(currentNodeSuccessor);
                 }
+            }
+
+            public void EliminateChains()
+            {
+                while (true)
+                {
+                    var changed = false;
+
+                    foreach (var u in _nodes.ToList())
+                    {
+                        foreach (var uvPair in u.Edges.ToList())
+                        {
+                            var v = uvPair.Key;
+                            var uvValue = uvPair.Value;
+                            if (uvValue <= 0)
+                            {
+                                continue;
+                            }
+
+                            foreach (var vwPair in v.Edges.ToList())
+                            {
+                                var w = vwPair.Key;
+                                var vwValue = vwPair.Value;
+                                if (w == u)
+                                {
+                                    continue;
+                                }
+
+                                if (Math.Abs(uvValue - vwValue) <= 0.0000001m)
+                                {
+                                    u.Edges.Remove(v);
+                                    v.Edges.Remove(w);
+
+                                    if (u.Edges.TryGetValue(w, out var uw))
+                                    {
+                                        u.Edges[w] = uw + uvValue;
+                                    }
+                                    else
+                                    {
+                                        u.Edges[w] = uvValue;
+                                    }
+
+                                    changed = true;
+                                    break;
+                                }
+                            }
+                            if (changed) break;
+                        }
+                        if (changed) break;
+                    }
+                    if (!changed) break;
+                }
+                RemovePredecesors();
             }
         }
 
