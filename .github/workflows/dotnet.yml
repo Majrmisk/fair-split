@@ -16,6 +16,6 @@ jobs:
         with:
           dotnet-version: 8.0.x
       - name: Restore
-        run: dotnet restore tests/FairSplit.Tests/FairSplit.Tests.csproj
+        run: dotnet restore FairSplit.Tests/FairSplit.Tests.csproj
       - name: Test
-        run: dotnet test tests/FairSplit.Tests/FairSplit.Tests.csproj --configuration Release
+        run: dotnet test FairSplit.Tests/FairSplit.Tests.csproj --configuration Release
