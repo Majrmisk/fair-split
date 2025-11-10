@@ -20,10 +20,9 @@ namespace FairSplit.ViewModels.Components
         public ICommand CancelCommand { get; }
 
         public IEnumerable<PaymentViewModel> CalculatedPayments => 
-            TransactionSettler.CalculateBestSettleOptions(_group, _transactions
+            TransactionSettler.CalculateBestSettleOptions(_group, [.. _transactions
                 .Where(t => t.IsSelected)
-                .Select(t => t.Transaction)
-                .ToList())
+                .Select(t => t.Transaction)])
             .Select(p => new PaymentViewModel(p));
 
         public SettleViewModel(Core core, NavigationStore groupNavigationStore)
@@ -58,7 +57,7 @@ namespace FairSplit.ViewModels.Components
             }
         }
 
-        private void Transaction_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void Transaction_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(TransactionViewModel.IsSelected))
             {

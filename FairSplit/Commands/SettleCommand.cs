@@ -4,18 +4,11 @@ using FairSplit.Utils;
 
 namespace FairSplit.Commands
 {
-    public class SettleCommand : CommandBase
+    public class SettleCommand(Group group) : CommandBase
     {
-        private readonly Group _group;
-
-        public SettleCommand(Group group)
-        {
-            _group = group;
-        }
-
         public override void Execute(object? parameter)
         {
-            TransactionSettler.CalculateBestSettleOptions(_group);
+            TransactionSettler.CalculateBestSettleOptions(group);
         }
     }
 }

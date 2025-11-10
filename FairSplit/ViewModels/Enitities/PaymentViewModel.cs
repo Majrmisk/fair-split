@@ -2,17 +2,10 @@
 
 namespace FairSplit.ViewModels.Enitities
 {
-    public class PaymentViewModel : ViewModelBase
+    public class PaymentViewModel(Payment payment) : ViewModelBase
     {
-        private readonly Payment _payment;
-
-        public string From => _payment.From.Name;
-        public string To => _payment.To.Name;
-        public string Amount => $"{_payment.Amount.ToString("F2")} €";
-
-        public PaymentViewModel(Payment payment)
-        {
-            _payment = payment;
-        }
+        public string From => payment.From.Name;
+        public string To => payment.To.Name;
+        public string Amount => $"{payment.Amount:F2} €";
     }
 }

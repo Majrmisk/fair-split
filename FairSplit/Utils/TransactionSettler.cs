@@ -1,5 +1,4 @@
 ﻿using FairSplit.Domain.Model;
-using System.Text;
 
 namespace FairSplit.Utils
 {
@@ -79,7 +78,7 @@ namespace FairSplit.Utils
 
         private class Graph
         {
-            private HashSet<Node> _nodes;
+            private readonly HashSet<Node> _nodes;
 
             public Graph()
             {
@@ -135,7 +134,7 @@ namespace FairSplit.Utils
             }
 
             // Assumes that the graph has no loops
-            private bool EliminateSplitBFS(Node start)
+            private static bool EliminateSplitBFS(Node start)
             {
                 Queue<Node> queue = [];
                 HashSet<Node> visited = [];
@@ -243,7 +242,7 @@ namespace FairSplit.Utils
                 }
             }
 
-            private bool EliminateLoopDFS(Node currentNode, HashSet<Node> visited)
+            private static bool EliminateLoopDFS(Node currentNode, HashSet<Node> visited)
             {
                 foreach (var edge in currentNode.Edges.ToArray())
                 {
@@ -355,16 +354,11 @@ namespace FairSplit.Utils
             }
         }
 
-        private class Node
+        private class Node(Member person)
         {
-            public Member Person { get; }
+            public Member Person { get; } = person;
             public Dictionary<Node, decimal> Edges { get; } = [];
             public (Node, decimal)? Predecesor { get; set; }
-
-            public Node(Member person)
-            {
-                Person = person;
-            }
         }
     }
 }

@@ -1,34 +1,23 @@
 ﻿using FairSplit.Domain.Model;
 using FairSplit.Services;
+using FairSplit.Stores;
 using FairSplit.ViewModels.Components;
 
 namespace FairSplit.Commands
 {
-    class AddNewTransactionCommand : NavigateCommand
+    class AddNewTransactionCommand(NavigationService selectGroupViewNavigationService,
+        Core core,
+        NewTransactionViewModel newTransactionViewModel,
+        Member payer) : NavigateCommand(selectGroupViewNavigationService)
     {
-        private readonly Core _core;
-        private Group _group => _core.CurrentGroup;
-        private readonly NavigationService _selectGroupViewNavigationService;
-        private readonly NewTransactionViewModel _newTransactionViewModel;
-        private readonly Member _payer;
-
-        public AddNewTransactionCommand(NavigationService selectGroupViewNavigationService,
-            Core core,
-            NewTransactionViewModel newTransactionViewModel,
-            Member payer) : base(selectGroupViewNavigationService)
-        {
-            _core = core;
-            _newTransactionViewModel = newTransactionViewModel;
-            _selectGroupViewNavigationService = selectGroupViewNavigationService;
-            _payer = payer;
-        }
+        private Group Group => core.CurrentGroup;
 
         public override void Execute(object? parameter)
         {
-            var columnTotals = _newTransactionViewModel.ColumnTotals;
+            var columnTotals = newTransactionViewModel.ColumnTotals;
             var total = columnTotals.Sum();
 
-            if (total == 0 || String.IsNullOrEmpty(_newTransactionViewModel.Name) || !_newTransactionViewModel.SelectedDate.HasValue)
+            if (total == 0 || String.IsNullOrEmpty(newTransactionViewModel.Name) || !newTransactionViewModel.SelectedDate.HasValue)
             {
                 return;
             }
@@ -38,13 +27,13 @@ namespace FairSplit.Commands
             {
                 if (columnTotals[i] != 0)
                 {
-                    recipients.Add(new(_group.GetAllMembers()[i - 1], columnTotals[i]));
+                    recipients.Add(new(Group.GetAllMembers()[i - 1], columnTotals[i]));
                 }
             }
 
-            _group.AddTransaction(new Transaction(_newTransactionViewModel.Name, total, _payer, 
-                (DateTime) _newTransactionViewModel.SelectedDate, false, _newTransactionViewModel.SelectedCategory, recipients));
-            _core.UpdateCurrentGroup();
+            Group.AddTransaction(new Transaction(newTransactionViewModel.Name, total, payer, 
+                (DateTime) newTransactionViewModel.SelectedDate, false, newTransactionViewModel.SelectedCategory, recipients));
+            core.UpdateCurrentGroup();
             base.Execute(parameter);
         }
     }

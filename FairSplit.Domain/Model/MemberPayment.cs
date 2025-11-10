@@ -1,17 +1,10 @@
 ﻿namespace FairSplit.Domain.Model
 {
-    public class MemberPayment
+    public class MemberPayment(Guid id, Member member, decimal amount)
     {
-        public Guid Id { get; }
-        public Member Member { get; }
-        public decimal Amount { get; }
-
-        public MemberPayment(Guid id, Member member, decimal amount)
-        {
-            Id = id;
-            Member = member;
-            Amount = amount;
-        }
+        public Guid Id { get; } = id;
+        public Member Member { get; } = member;
+        public decimal Amount { get; } = amount;
 
         public MemberPayment(Member member, decimal amount) : this(Guid.NewGuid(), member, amount) { }
     }

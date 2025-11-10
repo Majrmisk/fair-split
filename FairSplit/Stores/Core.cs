@@ -1,7 +1,8 @@
 ﻿using FairSplit.Domain.Commands;
+using FairSplit.Domain.Model;
 using FairSplit.Domain.Queries;
 
-namespace FairSplit.Domain.Model
+namespace FairSplit.Stores
 {
     public class Core
     {
@@ -10,7 +11,7 @@ namespace FairSplit.Domain.Model
         private readonly IUpdateGroupCommand _updateGroupCommand;
         private readonly IGetAllGroupsQuery _getAllGroupsQuery;
 
-        private List<Group> _groups;
+        private readonly List<Group> _groups;
         private readonly Group _fakeGroup = new("Fake Group");
 
         public Group CurrentGroup { get; set; }

@@ -2,19 +2,11 @@
 
 namespace FairSplit.EntityFramework
 {
-    public class FairSplitDbContextFactory
+    public class FairSplitDbContextFactory(DbContextOptions options)
     {
-        private readonly DbContextOptions _options;
-
-
-        public FairSplitDbContextFactory(DbContextOptions options)
-        {
-            _options = options;
-        }
-
         public FairSplitDbContext Create()
         {
-            return new FairSplitDbContext(_options);
+            return new FairSplitDbContext(options);
         }
     }
 }

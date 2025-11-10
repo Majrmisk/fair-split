@@ -1,5 +1,4 @@
 ﻿using FairSplit.Commands;
-using FairSplit.Domain.Model;
 using FairSplit.Stores;
 using FairSplit.ViewModels.Enitities;
 using System.Collections.ObjectModel;
@@ -17,7 +16,6 @@ namespace FairSplit.ViewModels
 			set { _groups = value; }
 		}
 		
-
         public ICommand NewGroupCommand { get; }
 
         public ICommand SelectGroupCommand { get; set; }

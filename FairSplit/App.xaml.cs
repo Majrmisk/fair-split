@@ -1,5 +1,4 @@
 ﻿using FairSplit.Domain.Commands;
-using FairSplit.Domain.Model;
 using FairSplit.Domain.Queries;
 using FairSplit.EntityFramework;
 using FairSplit.EntityFramework.Commands;
@@ -7,9 +6,6 @@ using FairSplit.EntityFramework.Queries;
 using FairSplit.Stores;
 using FairSplit.ViewModels;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
-using System.Configuration;
-using System.Data;
 using System.Windows;
 
 namespace FairSplit

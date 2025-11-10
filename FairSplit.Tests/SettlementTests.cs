@@ -1,5 +1,4 @@
 using FairSplit.Domain.Model;
-using FairSplit.Domain.Model.Enums;
 using FairSplit.Utils;
 using FluentAssertions;
 
@@ -13,7 +12,7 @@ namespace FairSplit.Tests
             Member payer,
             IEnumerable<MemberPayment> recipients)
         {
-            return new(Guid.NewGuid(), name, total, payer, DateTime.UtcNow, false, default, recipients.ToList());
+            return new(Guid.NewGuid(), name, total, payer, DateTime.UtcNow, false, default, [.. recipients]);
         }
 
         private static Group MakeGroup(

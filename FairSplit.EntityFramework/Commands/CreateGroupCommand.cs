@@ -4,65 +4,56 @@ using FairSplit.EntityFramework.DTOs;
 
 namespace FairSplit.EntityFramework.Commands
 {
-    public class CreateGroupCommand : ICreateGroupCommand
+    public class CreateGroupCommand(FairSplitDbContextFactory factory) : ICreateGroupCommand
     {
-        private readonly FairSplitDbContextFactory _factory;
-
-        public CreateGroupCommand(FairSplitDbContextFactory factory)
-        {
-            _factory = factory;
-        }
-
         public async Task Execute(Group group)
         {
-            using (FairSplitDbContext context = _factory.Create())
+            using FairSplitDbContext context = factory.Create();
+            var groupDto = new GroupDto
             {
-                var groupDto = new GroupDto
+                Id = group.Id,
+                Name = group.Name
+            };
+
+            var memberDtos = group.GetAllMembers().Select(m => new MemberDto
+            {
+                Id = m.Id,
+                Name = m.Name,
+                GroupId = groupDto.Id
+            }).ToList();
+
+            var transactionDtos = group.GetAllTransactions().Select(t =>
+            {
+                var transactionDto = new TransactionDto
                 {
-                    Id = group.Id,
-                    Name = group.Name
+                    Id = t.Id,
+                    Name = t.Name,
+                    TotalAmount = t.TotalAmount,
+                    TransactionTime = t.TransactionTime,
+                    IsPaidOff = t.IsPaidOff,
+                    Category = (int)t.Category,
+                    GroupId = groupDto.Id,
+                    PayerId = t.Payer.Id
                 };
 
-                var memberDtos = group.GetAllMembers().Select(m => new MemberDto
+                var memberPaymentDtos = t.Recipients.Select(r => new MemberPaymentDto
                 {
-                    Id = m.Id,
-                    Name = m.Name,
-                    GroupId = groupDto.Id
+                    Id = r.Id,
+                    MemberId = r.Member.Id,
+                    Amount = r.Amount,
+                    TransactionId = transactionDto.Id,
                 }).ToList();
 
-                var transactionDtos = group.GetAllTransactions().Select(t =>
-                {
-                    var transactionDto = new TransactionDto
-                    {
-                        Id = t.Id,
-                        Name = t.Name,
-                        TotalAmount = t.TotalAmount,
-                        TransactionTime = t.TransactionTime,
-                        IsPaidOff = t.IsPaidOff,
-                        Category = (int)t.Category,
-                        GroupId = groupDto.Id,
-                        PayerId = t.Payer.Id
-                    };
+                transactionDto.Recipients = memberPaymentDtos;
 
-                    var memberPaymentDtos = t.Recipients.Select(r => new MemberPaymentDto
-                    {
-                        Id = r.Id,
-                        MemberId = r.Member.Id,
-                        Amount = r.Amount,
-                        TransactionId = transactionDto.Id,
-                    }).ToList();
+                return transactionDto;
+            }).ToList();
 
-                    transactionDto.Recipients = memberPaymentDtos;
+            groupDto.Members = memberDtos;
+            groupDto.Transactions = transactionDtos;
 
-                    return transactionDto;
-                }).ToList();
-
-                groupDto.Members = memberDtos;
-                groupDto.Transactions = transactionDtos;
-
-                context.Groups.Add(groupDto);
-                await context.SaveChangesAsync();
-            }
+            context.Groups.Add(groupDto);
+            await context.SaveChangesAsync();
         }
     }
 }

@@ -3,18 +3,11 @@ using FairSplit.Services;
 
 namespace FairSplit.Commands
 {
-    public class NavigateCommand : CommandBase
+    public class NavigateCommand(NavigationService navigationService) : CommandBase
     {
-        private readonly NavigationService _navigationService;
-
-        public NavigateCommand(NavigationService navigationService)
-        {
-            _navigationService = navigationService;
-        }
-
         public override void Execute(object? parameter)
         {
-            _navigationService.Navigate();
+            navigationService.Navigate();
         }
     }
 }

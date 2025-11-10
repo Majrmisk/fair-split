@@ -1,6 +1,6 @@
 ﻿using FairSplit.Commands.Abstracts;
-using FairSplit.Domain.Model;
 using FairSplit.Services;
+using FairSplit.Stores;
 using FairSplit.ViewModels;
 using System.ComponentModel;
 
@@ -30,11 +30,22 @@ namespace FairSplit.Commands
 
         public override void Execute(object? parameter)
         {
-            _core.CurrentGroup = _core.GetGroupWithName(_selectGroupViewModel.SelectedGroup.Name);
+            if (_selectGroupViewModel.SelectedGroup is null)
+            {
+                return;
+            }
+
+            var group = _core.GetGroupWithName(_selectGroupViewModel.SelectedGroup.Name);
+            if (group is null)
+            {
+                return;
+            }
+
+            _core.CurrentGroup = group;
             _groupMainInfoViewNavigationService.Navigate();
         }
 
-        private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if(e.PropertyName == nameof(SelectGroupViewModel.SelectedGroup))
             {

@@ -7,6 +7,7 @@ using LiveCharts;
 using LiveCharts.Wpf;
 using System.Windows.Media;
 using FairSplit.Domain.Model.Enums;
+using FairSplit.ViewModels.Enitities;
 
 namespace FairSplit.ViewModels.Components
 {

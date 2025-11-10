@@ -4,30 +4,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FairSplit.EntityFramework.Commands
 {
-    public class DeleteGroupCommand : IDeleteGroupCommand
+    public class DeleteGroupCommand(FairSplitDbContextFactory factory) : IDeleteGroupCommand
     {
-        private readonly FairSplitDbContextFactory _factory;
-
-        public DeleteGroupCommand(FairSplitDbContextFactory factory)
-        {
-            _factory = factory;
-        }
-
         public async Task Execute(Group group)
         {
-            using (FairSplitDbContext context = _factory.Create())
+            using FairSplitDbContext context = factory.Create();
+
+            var existingGroupDto = await context.Groups
+                .FirstOrDefaultAsync(g => g.Id == group.Id);
+
+            if (existingGroupDto == null)
             {
-                var existingGroupDto = await context.Groups
-                    .FirstOrDefaultAsync(g => g.Id == group.Id);
-
-                if (existingGroupDto == null)
-                {
-                    return;
-                }
-
-                context.Groups.Remove(existingGroupDto);
-                await context.SaveChangesAsync();
+                return;
             }
+
+            context.Groups.Remove(existingGroupDto);
+            await context.SaveChangesAsync();
         }
     }
 }

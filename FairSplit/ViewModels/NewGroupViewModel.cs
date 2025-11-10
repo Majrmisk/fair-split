@@ -1,6 +1,6 @@
 ﻿using FairSplit.Commands;
-using FairSplit.Domain.Model;
 using FairSplit.Services;
+using FairSplit.Stores;
 using FairSplit.ViewModels.Enitities;
 using System.Collections.ObjectModel;
 using System.Windows.Input;

@@ -44,7 +44,7 @@ namespace FairSplit.Domain.Model
 
         public List<Transaction> GetUnsettledTransactions()
         {
-            return _transactions.Where(transaction => !transaction.IsPaidOff).ToList();
+            return [.. _transactions.Where(transaction => !transaction.IsPaidOff)];
         }
 
         public decimal GetTotalSpentByPersonSinceDate(Member person, DateTime? date = null)
